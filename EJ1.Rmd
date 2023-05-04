@@ -18,20 +18,47 @@ modelo=randomForest(cnt~.,data=datos)
 ```
 
 ```{r}
-library(cowplot)
 library(gridExtra)
 library(ggplot2)
 
 par(mfrow = c(2, 2))
-# Genera los PDPs de cada variable
-pdp1 <- partialPlot(modelo, datos, temp,plot=TRUE)
-pdp2 <- partialPlot(modelo, datos, days_since_2011,plot=TRUE)
-pdp3 <- partialPlot(modelo, datos, hum,plot=TRUE)
-pdp4 <- partialPlot(modelo, datos, windspeed,plot=TRUE)
 
+pdp1 <- partialPlot(modelo, datos, temp,plot=FALSE)
+pdp2 <- partialPlot(modelo, datos, days_since_2011,plot=FALSE)
+pdp3 <- partialPlot(modelo, datos, hum,plot=FALSE)
+pdp4 <- partialPlot(modelo, datos, windspeed,plot=FALSE)
 
+```
+
+```{r}
+gg1=data.frame(pdp1$x,pdp1$y)
+colnames(gg1)=c('temp','number')
+gg2=data.frame(pdp2$x,pdp2$y)
+colnames(gg2)=c('days_since_2011','number')
+gg3=data.frame(pdp3$x,pdp3$y)
+colnames(gg3)=c('hum','number')
+gg4=data.frame(pdp4$x,pdp4$y)
+colnames(gg4)=c('windspeed','number')
 
 
 
 ```
+
+```{r}
+g1=ggplot(gg1,aes(x=temp,y=number))+geom_line()+ylim(2750,6000)
+
+g2=ggplot(gg2,aes(x=days_since_2011,y=number))+geom_line()+ylim(2750,6000)
+
+g3=ggplot(gg3,aes(x=hum,y=number))+geom_line()+ylim(2750,6000)
+
+g4=ggplot(gg4,aes(x=windspeed,y=number))+geom_line()+ylim(2750,6000)
+
+
+```
+
+
+```{r}
+grid.arrange(g1,g2,g3,g4,ncol=4)
+```
+
 
